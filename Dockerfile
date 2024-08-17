@@ -12,7 +12,7 @@ RUN apt-get install -y --no-install-recommends \
 RUN apt-get clean
 
 # Add SSO plugin:
-RUN git clone https://github.com/bman46/CTFd-SSO-plugin.git CTFd/plugins/CTFd-SSO-plugin
+RUN git clone https://github.com/r00tstici/CTFd-SSO-plugin.git CTFd/plugins/CTFd-SSO-plugin
 
 RUN pip install --no-cache-dir -r requirements.txt \
     && for d in CTFd/plugins/*; do \
