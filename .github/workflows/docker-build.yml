@@ -36,4 +36,4 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ steps.repo.outputs.lowercase }}:latest
-            ghcr.io/${{ steps.repo.outputs.lowercase }}:${{ github.event.release.tag_name }}
+            ghcr.io/${{ steps.repo.outputs.lowercase }}:${{ github.sha }}
