@@ -1,4 +1,4 @@
-FROM ghcr.io/ctfd/ctfd:3.7.3 as build
+FROM ghcr.io/ctfd/ctfd:3.7.3 as build 
 USER root
 
 WORKDIR /opt/CTFd
