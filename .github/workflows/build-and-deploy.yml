@@ -1,4 +1,4 @@
-name: Build and Deploy CTFd
+name: Build and Deploy CTFd instance
 
 on:
   push:
