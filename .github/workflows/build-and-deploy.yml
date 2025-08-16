@@ -59,8 +59,8 @@ jobs:
         url='https://rancher.psuccso.org'
         cluster=local
         token=${{ secrets.RANCHER_TOKEN }}
-        app="${{ github.event.repository.name }}"
-        namespace="${{ github.event.repository.name }}"
+        namespace="ctfd"     # matches Rancher namespace
+        app="ctfd"           # matches deployment name for CTFd
 
         redeploy() {
             pod_upgrade_body=$(curl -s -u "$token" \
