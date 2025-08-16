@@ -47,8 +47,6 @@ jobs:
         tags: |
           harbor.psuccso.org/${{ env.TAG_LATEST }}
           harbor.psuccso.org/${{ env.TAG_COMMIT }}
-        cache-from: type=registry,ref=harbor.psuccso.org/${{ env.TAG_LATEST }}
-        cache-to: type=inline
 
   deploy-rancher:
     needs: build
