@@ -31,7 +31,7 @@ jobs:
 
     - name: Generate Tag Names
       run: |
-        repo="${{ steps.repo.outputs.lowercase }}"
+        repo="${{ steps.repo.outputs.lowercase }}"  # will just be 'ctfd-sso'
         short_sha=$(git rev-parse --short HEAD)
         echo "TAG_LATEST=$repo:latest" >> $GITHUB_ENV
         echo "TAG_COMMIT=$repo:$short_sha" >> $GITHUB_ENV
