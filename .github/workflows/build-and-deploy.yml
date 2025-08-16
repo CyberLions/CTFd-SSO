@@ -10,11 +10,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    # Use just the repo name, not org/repo
     - name: Set repo name lowercase
       id: repo
       uses: ASzc/change-string-case-action@v2
       with:
-        string: ${{ github.repository }}
+        string: ${{ github.event.repository.name }}
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
@@ -31,7 +32,7 @@ jobs:
 
     - name: Generate Tag Names
       run: |
-        repo="${{ steps.repo.outputs.lowercase }}"  # will just be 'ctfd-sso'
+        repo="${{ steps.repo.outputs.lowercase }}"  # now only 'ctfd-sso'
         short_sha=$(git rev-parse --short HEAD)
         echo "TAG_LATEST=$repo:latest" >> $GITHUB_ENV
         echo "TAG_COMMIT=$repo:$short_sha" >> $GITHUB_ENV
