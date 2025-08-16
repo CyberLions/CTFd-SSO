@@ -54,21 +54,22 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Redeploy Rancher
-      run: |
-        url='https://rancher.psuccso.org'
-        token=${{ secrets.RANCHER_TOKEN }}
-        project_id="p-qm57p"
-        namespace="ctfd"
-        app="ctfd"
+      - name: Redeploy CTFd in Rancher
+        run: |
+          url='https://rancher.psuccso.org'
+          cluster=local
+          token=${{ secrets.RANCHER_TOKEN }}
+          namespace="ctfd"   # Rancher namespace for CTFd
+          app="ctfd"         # Deployment name for CTFd
 
-        redeploy() {
-            curl -u "$token" -k -s \
-              -X PATCH \
-              -H "Content-Type: application/merge-patch+json" \
-              "$url/v1/projects/$project_id/workloads/deployment:$namespace:$app" \
-              --data "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"redeployTimestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}}}}}"
-        }
+          redeploy() {
+              curl -u "$token" -k -s \
+                -X PATCH \
+                -H "Content-Type: application/merge-patch+json" \
+                "$url/v1/projects/p-qm57p/workloads/deployment:$namespace:$app" \
+                --data "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"redeployTimestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}}}}}"
+          }
 
-        redeploy
+          redeploy
+
 
