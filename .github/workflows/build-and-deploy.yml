@@ -45,8 +45,8 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: |
-          harbor.psuccso.org/${{ env.TAG_LATEST }}
-          harbor.psuccso.org/${{ env.TAG_COMMIT }}
+          harbor.psuccso.org/ctfd-sso/${{ env.TAG_LATEST }}
+          harbor.psuccso.org/ctfd-sso/${{ env.TAG_COMMIT }}
 
   deploy-rancher:
     needs: build
