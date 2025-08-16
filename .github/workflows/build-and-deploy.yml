@@ -73,3 +73,38 @@ jobs:
           redeploy
 
 
+  deploy-rancher:
+    needs: [build-cms, build-website]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Extract branch name
+      shell: bash
+      run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+      id: extract_branch
+
+    - name: Redeploy Rancher
+      run: |
+        url='https://rancher.telaeris.com'
+        cluster=local
+        token=${{ secrets.RANCHER_TOKEN }}
+        namespace="ctfd"   # Rancher namespace for CTFd
+
+        redeploy() {
+            local app=$1
+            pod_upgrade_body=$(curl -s -u "$token" \
+            -k $url/k8s/clusters/$cluster/v1/apps.deployments/$namespace/$app \
+            -X GET \
+            -H 'Accept: application/json' \
+            -H 'Content-Type: application/json' \
+            -H 'Pragma: no-cache' \
+            -H 'Cache-Control: no-cache' 2>&1 | sed  "s/\"cattle\.io\/timestamp\"\:\"[0-9T:Z-]*\"/\"cattle\.io\/timestamp\":\"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\"/g")
+
+            curl -u "$token" \
+            -k -s $url/k8s/clusters/$cluster/v1/apps.deployments/$namespace/$app \
+            -X PUT \
+            -H 'Accept: application/json' \
+            -H 'Content-Type: application/json' \
+            --data-binary "$pod_upgrade_body" --compressed
+        }
+
+        redeploy "ctfd"
