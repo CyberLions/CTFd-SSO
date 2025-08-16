@@ -57,25 +57,18 @@ jobs:
     - name: Redeploy Rancher
       run: |
         url='https://rancher.psuccso.org'
-        cluster=local
         token=${{ secrets.RANCHER_TOKEN }}
-        namespace="ctfd"     # matches Rancher namespace
-        app="ctfd"           # matches deployment name for CTFd
+        project_id="p-qm57p"
+        namespace="ctfd"
+        app="ctfd"
 
         redeploy() {
-            pod_upgrade_body=$(curl -s -u "$token" \
-            -k $url/k8s/clusters/$cluster/v1/apps.deployments/$namespace/$app \
-            -X GET \
-            -H 'Accept: application/json' \
-            -H 'Content-Type: application/json' \
-            | sed "s/\"cattle\.io\/timestamp\":\"[0-9T:Z-]*\"/\"cattle\.io\/timestamp\":\"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\"/g")
-
             curl -u "$token" -k -s \
               -X PATCH \
               -H "Content-Type: application/merge-patch+json" \
-              "$url/k8s/clusters/$cluster/v1/namespaces/$namespace/deployments/$app" \
+              "$url/v1/projects/$project_id/workloads/deployment:$namespace:$app" \
               --data "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"redeployTimestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}}}}}"
-
         }
 
         redeploy
+
