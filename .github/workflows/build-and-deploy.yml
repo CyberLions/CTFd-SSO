@@ -50,31 +50,9 @@ jobs:
         cache-from: type=registry,ref=registry.psuccso.org/ctfd-sso/${{ env.TAG_LATEST_CMS }}
         cache-to: type=inline
 
+
   deploy-rancher:
     needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Redeploy CTFd in Rancher
-        run: |
-          url='https://rancher.psuccso.org'
-          cluster=local
-          token=${{ secrets.RANCHER_TOKEN }}
-          namespace="ctfd"   # Rancher namespace for CTFd
-          app="ctfd"         # Deployment name for CTFd
-
-          redeploy() {
-              curl -u "$token" -k -s \
-                -X PATCH \
-                -H "Content-Type: application/merge-patch+json" \
-                "$url/v1/projects/p-qm57p/workloads/deployment:$namespace:$app" \
-                --data "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"redeployTimestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}}}}}"
-          }
-
-          redeploy
-
-
-  deploy-rancher:
-    needs: [build-cms, build-website]
     runs-on: ubuntu-latest
     steps:
     - name: Extract branch name
