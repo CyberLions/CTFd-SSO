@@ -21,7 +21,7 @@ RUN pip install --no-cache-dir -r requirements.txt \
         fi; \
     done;
 
-# Add Whale plugin instead of K8s plugin
+# Add Whale plugin
 RUN git clone https://github.com/CyberLions/CTFd-whale-plugin CTFd/plugins/CTFd-whale-plugin
 
 
