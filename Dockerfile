@@ -1,4 +1,4 @@
-FROM ghcr.io/ctfd/ctfd:3.7.7 AS build
+FROM ghcr.io/ctfd/ctfd:3.7.7 as build
 USER root
 
 WORKDIR /opt/CTFd
@@ -21,8 +21,9 @@ RUN pip install --no-cache-dir -r requirements.txt \
         fi; \
     done;
 
-# Add k8s plugin:
-RUN git clone https://github.com/CyberLions/CTFd-k8s-challenge-plugin CTFd/plugins/CTFd-k8s-challenge-plugin
+# Add Whale plugin instead of K8s plugin
+RUN git clone https://github.com/CyberLions/CTFd-whale-plugin CTFd/plugins/CTFd-whale-plugin
+
 
 RUN pip install --no-cache-dir -r requirements.txt \
     && for d in CTFd/plugins/*; do \
@@ -38,8 +39,8 @@ WORKDIR /opt/CTFd
 COPY --chown=1001:1001 --from=build /opt/venv /opt/venv
 # Copy SSO plugin
 COPY --chown=1001:1001 --from=build /opt/CTFd/CTFd/plugins/CTFd-SSO-plugin /opt/CTFd/CTFd/plugins/CTFd-SSO-plugin
-# Copy k8s plugin
-COPY --chown=1001:1001 --from=build /opt/CTFd/CTFd/plugins/CTFd-k8s-challenge-plugin /opt/CTFd/CTFd/plugins/CTFd-k8s-challenge-plugin
+# Copy Whale plugin
+COPY --chown=1001:1001 --from=build /opt/CTFd/CTFd/plugins/CTFd-whale-plugin /opt/CTFd/CTFd/plugins/CTFd-whale-plugin
 
 USER 1001
 EXPOSE 8000
