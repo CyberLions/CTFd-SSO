@@ -45,8 +45,8 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: |
-          harbor.psuccso.org/ctfd-sso/${{ env.TAG_LATEST }}
-          harbor.psuccso.org/ctfd-sso/${{ env.TAG_COMMIT }}
+          registry.psuccso.org/ctfd-sso/${{ env.TAG_LATEST }}
+          registry.psuccso.org/ctfd-sso/${{ env.TAG_COMMIT }}
         cache-from: type=registry,ref=registry.psuccso.org/ctfd-sso/${{ env.TAG_LATEST_CMS }}
         cache-to: type=inline
 
