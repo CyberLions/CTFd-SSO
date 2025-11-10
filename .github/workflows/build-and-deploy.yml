@@ -26,7 +26,7 @@ jobs:
     - name: Login to Harbor
       uses: docker/login-action@v3
       with:
-        registry: harbor.psuccso.org
+        registry: registry.psuccso.org
         username: robot$github
         password: ${{ secrets.DOCKER_PASSWORD }}
 
