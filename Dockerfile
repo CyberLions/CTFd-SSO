@@ -32,7 +32,7 @@ RUN pip install --no-cache-dir -r requirements.txt \
         fi; \
     done;
 
-FROM ghcr.io/ctfd/ctfd:3.7.7 AS release
+FROM ghcr.io/ctfd/ctfd:3.8.1 AS release
 WORKDIR /opt/CTFd
 
 # Copy VENV
