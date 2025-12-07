@@ -26,8 +26,8 @@ jobs:
     - name: Login to Harbor
       uses: docker/login-action@v3
       with:
-        registry: harbor.psuccso.org
-        username: robot$ctfd
+        registry: registry.psuccso.org
+        username: robot$github
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Generate Tag Names
@@ -45,8 +45,8 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: |
-          harbor.psuccso.org/ctfd-sso/${{ env.TAG_LATEST }}
-          harbor.psuccso.org/ctfd-sso/${{ env.TAG_COMMIT }}
+          registry.psuccso.org/ctfd-sso/${{ env.TAG_LATEST }}
+          registry.psuccso.org/ctfd-sso/${{ env.TAG_COMMIT }}
         cache-from: type=registry,ref=registry.psuccso.org/ctfd-sso/${{ env.TAG_LATEST_CMS }}
         cache-to: type=inline
 

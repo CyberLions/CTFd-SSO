@@ -1,4 +1,4 @@
-FROM ghcr.io/ctfd/ctfd:3.7.7 as build
+FROM ghcr.io/ctfd/ctfd:3.8.1 as build
 USER root
 
 WORKDIR /opt/CTFd
@@ -35,7 +35,7 @@ RUN pip install --no-cache-dir -r requirements.txt \
 # Add Group plugin
 RUN git clone https://github.com/CyberLions/CTFd-Groups-Plugin CTFd/plugins/CTFd-Groups-Plugin
 
-FROM ghcr.io/ctfd/ctfd:3.7.7 AS release
+FROM ghcr.io/ctfd/ctfd:3.8.1 AS release
 WORKDIR /opt/CTFd
 
 # Copy VENV
