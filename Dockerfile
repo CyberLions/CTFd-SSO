@@ -32,6 +32,9 @@ RUN pip install --no-cache-dir -r requirements.txt \
         fi; \
     done;
 
+# Add Group plugin
+RUN git clone https://github.com/CyberLions/CTFd-Groups-Plugin CTFd/plugins/CTFd-Groups-Plugin
+
 FROM ghcr.io/ctfd/ctfd:3.7.7 AS release
 WORKDIR /opt/CTFd
 
@@ -41,6 +44,8 @@ COPY --chown=1001:1001 --from=build /opt/venv /opt/venv
 COPY --chown=1001:1001 --from=build /opt/CTFd/CTFd/plugins/CTFd-SSO-plugin /opt/CTFd/CTFd/plugins/CTFd-SSO-plugin
 # Copy Whale plugin
 COPY --chown=1001:1001 --from=build /opt/CTFd/CTFd/plugins/CTFd-whale-plugin /opt/CTFd/CTFd/plugins/CTFd-whale-plugin
+# Copy Group plugin
+COPY --chown=1001:1001 --from=build /opt/CTFd/CTFd/plugins/CTFd-Groups-Plugin /opt/CTFd/CTFd/plugins/CTFd-Groups-Plugin
 
 USER 1001
 EXPOSE 8000
