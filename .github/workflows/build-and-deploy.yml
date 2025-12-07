@@ -62,7 +62,7 @@ jobs:
 
     - name: Redeploy Rancher
       run: |
-        url='https://rancher.telaeris.com'
+        url='https://rancher.psuccso.org'
         cluster=local
         token=${{ secrets.RANCHER_TOKEN }}
         namespace="ctfd"   # Rancher namespace for CTFd
