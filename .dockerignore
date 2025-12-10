@@ -17,4 +17,4 @@ CTFd/uploads/**/*
 **/__pycache__
 .venv*
 venv*
-venv-*
+ven*
