@@ -4,7 +4,7 @@ CTFd/uploads
 CTFd/*.db
 CTFd/uploads/**/*
 .ctfd_secret_key
-.data
+.data*
 .git
 .codecov.yml
 .dockerignore
