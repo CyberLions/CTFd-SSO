@@ -35,6 +35,9 @@ RUN pip install --no-cache-dir -r requirements.txt \
 # Add Group plugin
 RUN git clone https://github.com/CyberLions/CTFd-Groups-Plugin CTFd/plugins/CTFd-Groups-Plugin
 
+# Add First Blood plugin
+RUN git clone https://github.com/CyberLions/CTFd-FirstBlood CTFd/plugins/CTFd-FirstBlood
+
 FROM ghcr.io/ctfd/ctfd:3.8.1 AS release
 WORKDIR /opt/CTFd
 
@@ -46,6 +49,8 @@ COPY --chown=1001:1001 --from=build /opt/CTFd/CTFd/plugins/CTFd-SSO-plugin /opt/
 COPY --chown=1001:1001 --from=build /opt/CTFd/CTFd/plugins/CTFd-whale-plugin /opt/CTFd/CTFd/plugins/CTFd-whale-plugin
 # Copy Group plugin
 COPY --chown=1001:1001 --from=build /opt/CTFd/CTFd/plugins/CTFd-Groups-Plugin /opt/CTFd/CTFd/plugins/CTFd-Groups-Plugin
+# Copy First Blood plugin
+COPY --chown=1001:1001 --from=build /opt/CTFd/CTFd/plugins/CTFd-FirstBlood /opt/CTFd/CTFd/plugins/CTFd-FirstBlood
 
 USER 1001
 EXPOSE 8000
