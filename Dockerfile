@@ -1,56 +1,46 @@
-FROM ghcr.io/ctfd/ctfd:3.8.1 as build
+FROM ghcr.io/ctfd/ctfd:3.8.1 AS build
 USER root
 
 WORKDIR /opt/CTFd
 
-RUN apt-get update 
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
         build-essential \
         libffi-dev \
         libssl-dev \
-        git 
-RUN apt-get clean
+        git \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Add SSO plugin:
+# Add SSO plugin
 RUN git clone https://github.com/CyberLions/CTFd-SSO-plugin CTFd/plugins/CTFd-SSO-plugin
-
-RUN pip install --no-cache-dir -r requirements.txt \
-    && for d in CTFd/plugins/*; do \
-        if [ -f "$d/requirements.txt" ]; then \
-            pip install --no-cache-dir -r "$d/requirements.txt";\
-        fi; \
-    done;
-
-# Add Whale plugin
-#RUN git clone https://github.com/CyberLions/CTFd-whale-plugin CTFd/plugins/CTFd-whale-plugin
-
-
-#RUN pip install --no-cache-dir -r requirements.txt \
-#    && for d in CTFd/plugins/*; do \
-#        if [ -f "$d/requirements.txt" ]; then \
-#            pip install --no-cache-dir -r "$d/requirements.txt";\
-#        fi; \
-#    done;
 
 # Add Group plugin
 RUN git clone https://github.com/CyberLions/CTFd-Groups-Plugin CTFd/plugins/CTFd-Groups-Plugin
 
-# Add First Blood plugin
-#RUN git clone https://github.com/CyberLions/CTFd-FirstBlood CTFd/plugins/CTFd-FirstBlood
+# Add k8s container challenges plugin
+RUN git clone https://github.com/CyberLions/ctfd-k8s-challenges /tmp/ctfd-k8s-challenges \
+    && mv /tmp/ctfd-k8s-challenges/ctfd-plugin CTFd/plugins/ctfd-k8s-challenges \
+    && rm -rf /tmp/ctfd-k8s-challenges
+
+RUN pip install --no-cache-dir -r requirements.txt \
+    && for d in CTFd/plugins/*; do \
+        if [ -f "$d/requirements.txt" ]; then \
+            pip install --no-cache-dir -r "$d/requirements.txt"; \
+        fi; \
+    done;
 
 FROM ghcr.io/ctfd/ctfd:3.8.1 AS release
 WORKDIR /opt/CTFd
 
-# Copy VENV
+# Copy venv with installed dependencies
 COPY --chown=1001:1001 --from=build /opt/venv /opt/venv
 # Copy SSO plugin
 COPY --chown=1001:1001 --from=build /opt/CTFd/CTFd/plugins/CTFd-SSO-plugin /opt/CTFd/CTFd/plugins/CTFd-SSO-plugin
-# Copy Whale plugin
-#COPY --chown=1001:1001 --from=build /opt/CTFd/CTFd/plugins/CTFd-whale-plugin /opt/CTFd/CTFd/plugins/CTFd-whale-plugin
 # Copy Group plugin
 COPY --chown=1001:1001 --from=build /opt/CTFd/CTFd/plugins/CTFd-Groups-Plugin /opt/CTFd/CTFd/plugins/CTFd-Groups-Plugin
-# Copy First Blood plugin
-#COPY --chown=1001:1001 --from=build /opt/CTFd/CTFd/plugins/CTFd-FirstBlood /opt/CTFd/CTFd/plugins/CTFd-FirstBlood
+# Copy k8s container challenges plugin
+COPY --chown=1001:1001 --from=build /opt/CTFd/CTFd/plugins/ctfd-k8s-challenges /opt/CTFd/CTFd/plugins/ctfd-k8s-challenges
 
 USER 1001
 EXPOSE 8000
